@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+require 'clearwater/roda'
+
+# If this grows beyond this simple app generator, may want to use something like
+# Thor. But for now, this is all we really need.
+
+command, app_name, _ = ARGV
+
+usage = <<-USAGE
+Usage:
+  $ clearwater-roda new APP_NAME'
+    # Generates a Clearwater/Roda app with the specified name.
+  $ clearwater-roda -v'
+    # Display version and exit
+  $ clearwater-roda -h'
+    # Display usage info
+USAGE
+
+case command
+when 'new'
+  Clearwater::Roda.build_app app_name
+when '-v'
+  puts Clearwater::Roda::VERSION
+when '-h'
+  puts usage
+else
+  warn usage
+  exit 1
+end

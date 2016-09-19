@@ -1,0 +1,5 @@
+#!/bin/sh
+
+bundle check || bundle -j12
+
+rerun -i 'assets/**/*' 'rackup'
