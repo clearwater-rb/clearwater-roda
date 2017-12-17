@@ -1,7 +1,6 @@
 require 'roda'
 require 'roda/opal_assets'
 require 'opal'
-require 'clearwater'
 
 class %{titleized_name} < Roda
   plugin :public
@@ -17,14 +16,26 @@ class %{titleized_name} < Roda
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>%{titleized_name}</title>
+    <title>#{app_title}</title>
   </head>
 
   <body>
     <div id="app"></div>
-    #{assets.js 'app.js'}
+    #{additional_markup}
+    #{assets.js client_app}
   </body>
 </html>
     HTML
+  end
+
+  def app_title
+    '%{titleized_name}'
+  end
+
+  def client_app
+    'app.js'
+  end
+
+  def additional_markup
   end
 end

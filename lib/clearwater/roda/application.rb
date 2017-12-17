@@ -7,11 +7,12 @@ module Clearwater
     class Application
       DirectoryAlreadyExists = Class.new(StandardError)
 
+      TEMPLATE_PATH = File.expand_path('../../../../templates', __FILE__)
+
       attr_reader :name
 
       def initialize name
         @name = name
-        @previous_dirs = []
       end
 
       def build
@@ -20,10 +21,7 @@ module Clearwater
         mkdir
         chdir
         write_files
-        bundle
         git_init
-        git_commit
-        chdir_back
 
         puts
         puts <<-EOF
@@ -49,37 +47,21 @@ your assets for production, simply run:
       end
 
       def chdir
-        @previous_dirs.push Dir.pwd
         FileUtils.chdir dir_name
-      end
-
-      def chdir_back
-        FileUtils.chdir @previous_dirs.pop
-      end
-
-      def bundle
-        system "bundle -j12"
       end
 
       def git_init
         `git init`
       end
 
-      def git_commit
-        `git add --all .`
-        `git commit -m 'Hello world!'`
-      end
-
       def write_files
-        files = %W(
-          Gemfile
-          config.ru
-          assets/js/app.rb
-          dev
-          Rakefile
-        )
+        files = Dir["#{TEMPLATE_PATH}/**/*"]
+          .select { |file| File.file? file }
+          .map { |file| file.sub("#{TEMPLATE_PATH}/", '') }
+          .grep_v('app.rb')
         
         files.each do |template_name|
+          puts "Writing #{template_name}..."
           Template.new(
             template_path(template_name),
             template_name,
@@ -88,6 +70,7 @@ your assets for production, simply run:
         end
 
         app_filename = "#{underscore(name)}.rb"
+        puts "Writing #{app_filename}..."
         Template.new(
           template_path('app.rb'),
           app_filename,
@@ -105,7 +88,7 @@ your assets for production, simply run:
       end
 
       def template_path(name)
-        "#{File.expand_path('../../../../templates', __FILE__)}/#{name}"
+        "#{TEMPLATE_PATH}/#{name}"
       end
 
       def underscore name
@@ -113,7 +96,7 @@ your assets for production, simply run:
       end
 
       def titleize name
-        name = name.gsub(/_[a-z]/) { |match| match[1].upcase }
+        name = name.gsub(/[_-][a-z]/) { |match| match[1].upcase }
         name[0] = name[0].upcase
         name
       end
