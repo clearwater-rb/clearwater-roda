@@ -11,4 +11,4 @@ dev_tools = GrandCentral::DevTools.new(
 )
 dev_tools.start
 
-Clearwater::HotLoader.connect 9292
+Clearwater::HotLoader.connect
