@@ -14,7 +14,7 @@ initial_state = AppState.new(
   counter: 0,
 )
 
-Store = GrandCentral::Store.new(initial_state) do |state, action|
+handler = proc do |state, action|
   case action
   when Increment
     state.update counter: state.counter + 1
@@ -29,6 +29,13 @@ Store = GrandCentral::Store.new(initial_state) do |state, action|
   else
     state
   end
+end
+
+# Allow swapping out handlers on the same store for hot-loaded code in dev.
+if defined? Store
+  Store.handler = handler
+else
+  Store = GrandCentral::Store.new(initial_state, &handler)
 end
 
 # When you want to use application state in a component, you can use this module

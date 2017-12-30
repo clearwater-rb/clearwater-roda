@@ -11,7 +11,7 @@ group :development do
   # Assets from these gems won't be needed in production since they'll be
   # precompiled
   gem 'clearwater', '~> 1.0.0.rc4'
-  gem 'grand_central'
+  gem 'grand_central', '~> 0.6.0'
   gem 'grand_central-dev_tools'
   gem 'clearwater-hot_loader'
 end
