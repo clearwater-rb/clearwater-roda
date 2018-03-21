@@ -38,6 +38,12 @@ else
   Store = GrandCentral::Store.new(initial_state, &handler)
 end
 
+# on_dispatch takes an optional tag that lets hot loading replace the previous
+# incarnation. Here we tag this block as containing our side effects.
+Store.on_dispatch :side_effects do |before, after, action|
+  # Add side effects based on action
+end
+
 # When you want to use application state in a component, you can use this module
 # to add the attribute methods to that component using the following pattern:
 #

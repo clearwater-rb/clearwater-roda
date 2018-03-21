@@ -25,8 +25,10 @@ require 'grand_central/action'
 #     else state
 #   end
 
-# Create a top-level action
-Action = GrandCentral::Action.create
+# Create a top-level action, allowing for hot-loading not to overwrite it.
+unless defined? Action
+  Action = GrandCentral::Action.create
+end
 
 CounterAction = Action.create do
   Increment = create
