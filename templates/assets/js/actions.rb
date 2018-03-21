@@ -2,9 +2,9 @@ require 'grand_central/action'
 
 # Here we define an action taxonomy
 #
-# GrandCentral::Action
+# GrandCentral::Action -- Library-level action
 # |
-# + Action -- Your top application-level action
+# + Action -- Your root application-level action
 #   |
 #   + CounterAction
 #   | |
